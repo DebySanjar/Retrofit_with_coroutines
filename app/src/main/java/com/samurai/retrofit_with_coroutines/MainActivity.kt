@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var todoAdapter: TodoAdapter
     private lateinit var todoViewModel: TodoViewModel
 
-    private  val TAG = "MainActivity"
+    private val TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,8 +47,28 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "onCreate: $todos")
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            todoViewModel.getAllTodos()
+        }
+
         todoViewModel.isLoading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.swipeRefresh.isRefreshing = isLoading
+        }
+
+
+        binding.swipeRefresh.setColorSchemeResources(
+            R.color.refresh_color4
+        )
+
+        binding.swipeRefresh.setProgressViewOffset(
+            true,
+            0,
+            150
+        )
+
+
+
+        todoViewModel.isLoading.observe(this) { isLoading ->
             binding.recy.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
 
@@ -68,12 +88,16 @@ class MainActivity : AppCompatActivity() {
                     val desc = dialogView.findViewById<EditText>(R.id.etDesc).text.toString()
                     val isDone = dialogView.findViewById<CheckBox>(R.id.cbDone).isChecked
 
-                    if (title.isNotBlank() && desc.isNotBlank()){
+                    if (title.isNotBlank() && desc.isNotBlank()) {
                         val todo = Reja(title, desc, isDone)
                         todoViewModel.addTodo(todo)
                         dialog.dismiss()
                     } else {
-                        Snackbar.make(binding.root, "Maydonlarni to'ldiring!", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(
+                            binding.root,
+                            "Maydonlarni to'ldiring!",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
                     }
 
                 }
@@ -84,4 +108,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    }
+}

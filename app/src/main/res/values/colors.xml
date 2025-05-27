@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="refresh_color1">#FF6F00</color> <!-- sariq -->
+    <color name="refresh_color2">#D32F2F</color> <!-- qizil -->
+    <color name="refresh_color3">#388E3C</color> <!-- yashil -->
+    <color name="refresh_color4">#1976D2</color> <!-- ko‘k -->
+
 </resources>
