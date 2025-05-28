@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                Status.LOADING -> {
                    binding.swipeRefresh.isRefreshing = true
                }
+
                Status.SUCCESS -> {
                    binding.swipeRefresh.isRefreshing = false
                    todoAdapter.updateList(it.body as List<Todo>)
