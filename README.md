@@ -1,4 +1,4 @@
-# 📋 Retrofit + Coroutine based Todo App (MVVM Architecture)
+# 📋 Retrofit + Coroutines + LiveData  based Todo App (MVVM Architecture)
 
 This is a simple **Todo Android application** built using **Kotlin**, **Retrofit**, **Coroutines**, and **MVVM** architecture.  
 The app supports basic **CRUD operations** using a RESTful API.
@@ -21,9 +21,9 @@ The app supports basic **CRUD operations** using a RESTful API.
 
 | Layer           | Technology                                 |
 |----------------|---------------------------------------------|
-| UI             | XML, ViewBinding, RecyclerView              |
+| UI             | XML, RecyclerView , SwipeRefreshLayout      |        |
 | State          | ViewModel, LiveData                         |
-| Networking     | Retrofit, Gson, Coroutines (Dispatchers.IO) |
+| Networking     | Retrofit, Gson, Coroutines |
 | Architecture   | MVVM + Repository Pattern                   |
 
 ---
@@ -49,4 +49,8 @@ implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
 
 // Material Design
 implementation 'com.google.android.material:material:1.9.0'
+
+//swipeRefreshLayout
+implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
 ```
