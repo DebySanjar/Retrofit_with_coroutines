@@ -9,13 +9,13 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.samurai.retrofit_with_coroutines.adapters.TodoAdapter
 import com.samurai.retrofit_with_coroutines.databinding.ActivityMainBinding
 import com.samurai.retrofit_with_coroutines.models.Reja
+import com.samurai.retrofit_with_coroutines.models.Todo
+import com.samurai.retrofit_with_coroutines.utils.Status
 import com.samurai.retrofit_with_coroutines.vm.TodoViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -42,18 +42,30 @@ class MainActivity : AppCompatActivity() {
 
         todoViewModel.getAllTodos()
 
-        todoViewModel.list.observe(this) { todos ->
-            todoAdapter.updateList(todos)
-            Log.d(TAG, "onCreate: $todos")
-        }
+       todoViewModel.getAllTodos().observe(this) {
+           when(it.status){
+               Status.ERROR -> {
+
+               }
+               Status.LOADING -> {
+                   binding.swipeRefresh.isRefreshing = true
+               }
+               Status.SUCCESS -> {
+                   binding.swipeRefresh.isRefreshing = false
+                   todoAdapter.updateList(it.body as List<Todo>)
+               }
+
+           }
+       }
+
 
         binding.swipeRefresh.setOnRefreshListener {
             todoViewModel.getAllTodos()
         }
 
-        todoViewModel.isLoading.observe(this) { isLoading ->
-            binding.swipeRefresh.isRefreshing = isLoading
-        }
+//        todoViewModel.isLoading.observe(this) { isLoading ->
+//            binding.swipeRefresh.isRefreshing = isLoading
+//        }
 
 
         binding.swipeRefresh.setColorSchemeResources(
@@ -68,9 +80,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        todoViewModel.isLoading.observe(this) { isLoading ->
-            binding.recy.visibility = if (isLoading) View.GONE else View.VISIBLE
-        }
+
 
         binding.fab.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.dialog_add_todo, null)

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.samurai.retrofit_with_coroutines.models.Reja
 import com.samurai.retrofit_with_coroutines.models.Todo
 import com.samurai.retrofit_with_coroutines.repository.TodoRepository
+import com.samurai.retrofit_with_coroutines.utils.Recourse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -17,26 +18,29 @@ class TodoViewModel : ViewModel() {
     private val todoList = MutableLiveData<List<Todo>>()
     val list: LiveData<List<Todo>> get() = todoList
 
+    private val liveTodo = MutableLiveData<Recourse<Any>>()
+
     private val loading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = loading
 
 
     private val er = MutableLiveData<String>()
 
-    fun getAllTodos() {
+    fun getAllTodos() : MutableLiveData<Recourse<Any>>{
         viewModelScope.launch(Dispatchers.IO) {
 
-            loading.postValue(true)
+            liveTodo.postValue(Recourse.loading())
 
             try {
                 val todos = repository.getAllTodos()
-                todoList.postValue(todos)
+                liveTodo.postValue(Recourse.success(todos))
             } catch (e: Exception) {
-                er.postValue(e.message)
+                liveTodo.postValue(Recourse.error(e.message))
             } finally {
-                loading.postValue(false)
+//                loading.postValue(false)
             }
         }
+        return liveTodo
     }
 
     fun deleteTodo(id: Int) {
